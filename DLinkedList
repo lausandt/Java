@@ -1,0 +1,91 @@
+package Arrays_And_LinkLists;
+
+/**
+ * 
+ * @author Lau Sandt
+ * https://github.com/lausandt/Java
+ *
+ */
+
+public class DLinkedList<E> {
+	private static class Node<E> {
+		private E element;								// reference to the element stored at this Node
+		private Node<E> next;							// reference to the subsequent Node in the list
+		private Node<E> preceding;
+
+		public Node(E e, Node<E> p, Node<E> n) { 
+			element = e;
+			next = n;
+			preceding = p; 
+		}
+		/** return the elemt associated with the node */
+		public E getElement() { return element;	}
+		/** return the next node associated with this node */
+		public Node<E> getNext() { return next; }
+		/** return the previous node associated with this node */
+		public Node<E> getPreceding(){return preceding;}
+		/** set the next node to be associated with this node */
+		public void setNext(Node<E> n) { next = n;}
+		/** set the preceeding node to be associated with this node */
+		public void setPreceding(Node<E> p) {preceding = p;}
+	}
+    
+	private Node<E> header;
+	private Node<E> trailer;
+	private int size = 0;
+	
+	public DLinkedList(){
+		header = new Node<>(null, null,null);
+		trailer = new Node<>(null, header, null);
+		header.setNext(trailer);
+	}
+	
+	/** returns the size of the list */
+	public int size() { return size;}
+
+	/** returns true if the list is empty */
+	public boolean isEmpty() { return size==0; }
+	
+	/** returns the first element of the list */
+	public E first() { 
+		if (isEmpty()) return null; 								
+		return header.getNext().getElement(); 					
+	}
+	/** returns the last element of the list */
+	public E last() { 
+		if (isEmpty()) return null; 
+		return trailer.getPreceding().getElement();
+	}
+	/** add element to the beginning of the list */
+	public void addFirst(E e) {
+		addElement(e, header, header.getNext());									
+	}
+	/** add element to the end of the list */
+	public void addLast(E e) {
+		addElement(e, trailer.getPreceding(), trailer);
+	}
+	/** remove the first element from the list */
+	public E removeFirst() {
+		if (isEmpty()) return null;
+		return remove(header.getNext());
+	}
+	/** remove the last element from the list */
+	public E removeLast() {
+		if (isEmpty()) return null;
+		return remove(trailer.getPreceding());
+	}
+	/** private method to remove a node from the list */
+	private E remove(Node<E> node) {
+		node.getPreceding().setNext(node.getNext());   						// set the next of the proceding node equal to the next of the current node
+		node.getNext().setPreceding(node.getPreceding());					// set the preceding from the next node equal to the preceding of the current node
+		size--;
+		return node.getElement();
+	}
+	/** method to add a node to the list */
+	private void addElement(E e, Node<E> predecessor, Node<E> successor) {
+		Node<E> newest = new Node<>(e, predecessor, successor);
+		predecessor.setNext(newest);
+		successor.setPreceding(newest);
+		size++;
+	}
+}
