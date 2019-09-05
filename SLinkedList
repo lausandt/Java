@@ -14,9 +14,9 @@ public class SLinkedList<E> {
 	// nested class Node
 	private static class Node<E> {
 		private E element;			// reference to the element stored at this Node
-		private Node<E> next;		// referennce to the subsequent Node in the list
+		private Node<E> next;			// reference to the subsequent Node in the list
 
-		public Node(E e, Node<E> n) { // constructor
+		public Node(E e, Node<E> n) { 		// constructor
 			element = e;
 			next = n;
 		}
@@ -27,8 +27,11 @@ public class SLinkedList<E> {
 	private Node<E> head = null;
 	private Node<E> tail = null;
 	private int size = 0;
-
+	
+        /** returns the size of the list*/
 	public int size() { return size;}
+	
+	/** returns True if the list is empty */
 	public boolean isEmpty() { return size==0; }
 
 	/** returns the first element of the list */
@@ -49,23 +52,23 @@ public class SLinkedList<E> {
 	public void addFirst(E e) {
 		head = new Node<>(e, head);			// assign e to the head of the list
 		if (size == 0)
-			tail = head;           		    // special case where the list is empty and head and tail are the same
+			tail = head;           		    	// special case where the list is empty and head and tail are the same
 		size++;
 	}
 	/** add an element to the tail of the list*/
 	public void addLast(E e) {
 		Node<E> newest = new Node<>(e, null); // create new node
 		if (isEmpty())
-			head = newest;                   // special case where the list is empty and head and tail are the same
+			head = newest;                   	// special case where the list is empty and head and tail are the same
 		else
 			tail.setNext(newest);			// set the next node for the current tail 
-		tail = newest;						// set newest to be the tail
+		tail = newest;					// set newest to be the tail
 		size++;
 	}
 	/** remove the first element from the list */
 	public E removeFirst() {
-		if (head == null) return null; 		// special case where the list is empty
-		E element = head.getElement();      // create the return value, the element associated with the current head
+		if (head == null) return null; 			// special case where the list is empty
+		E element = head.getElement();      		// create the return value, the element associated with the current head
 		head = head.getNext();				// set the next node to head
 		size--;
 		return element;
