@@ -8,6 +8,7 @@ package Arrays_And_LinkLists;
  * This data structure saves on the singular linked list as we only need to keep track of the tail. 
  * The head can be infered from the tail
  * The only added feature is rotate()
+ * elements in the middle of the list can't be easily accessed or removed
  * 
  * @author Lau Sandt
  * https://github.com/lausandt/Java
@@ -17,8 +18,8 @@ package Arrays_And_LinkLists;
 public class CLinkedList<E> {
 	/** nested class node */
 	private static class Node<E> {
-		private E element;								// reference to the element stored at this Node
-		private Node<E> next;							// reference to the subsequent Node in the list
+		private E element;						// reference to the element stored at this Node
+		private Node<E> next;						// reference to the subsequent Node in the list
 
 		public Node(E e, Node<E> n) { 
 			element = e;
@@ -44,7 +45,7 @@ public class CLinkedList<E> {
 	/** returns the first element of the list */
 	public E first() { 
 		if (isEmpty()) {
-			return null; 									// special case for the empty list 
+			return null; 						// special case for the empty list 
 		}
 		return tail.getNext().getElement(); 				// the first node is the element tail refers to.
 	}
@@ -62,13 +63,13 @@ public class CLinkedList<E> {
 	}
 	/** add an element to head of the list */
 	public void addFirst(E e) {	
-		if (tail == null) {									// special case for when the list is empty
+		if (tail == null) {						// special case for when the list is empty
 			tail = new Node<>(e, null);	
 			tail.setNext(tail);
 		}
 		else {			
 			Node<E> first = new Node<>(e, tail.getNext());
-			tail.setNext(first); 							// assign e to the head of the list
+			tail.setNext(first); 					// assign e to the head of the list
 		}
 		size++;
 	}
@@ -80,8 +81,8 @@ public class CLinkedList<E> {
 	}
 	/** remove the first element from the list */
 	public E removeFirst() {
-		if (tail == null) return null; 				  		// special case where the list is empty
-		E element = tail.getNext().getElement();      		// create the return value, the element associated with the current first on the list
+		if (tail == null) return null; 				   	// special case where the list is empty
+		E element = tail.getNext().getElement();      			// create the return value, the element associated with the current first on the list
 		tail.setNext(tail.getNext().getNext()); 	  		// set the next node for tail
 		size--;
 		return element;
