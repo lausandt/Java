@@ -1,0 +1,74 @@
+package Arrays_And_LinkLists;
+
+/**
+ * Class for the generation of a singly linked list 
+ * A singly linked list is a collection of nodes that collectively form a linear sequence
+ * Each node in the list stores a reference to an object that is an element of the sequence
+ * Furthermore each node stores a reference to the next node of the list
+ * 
+ * @author Lau Sandt
+ * https://github.com/lausandt/Java
+ */
+
+public class SLinkedList<E> {
+	// nested class Node
+	private static class Node<E> {
+		private E element;			// reference to the element stored at this Node
+		private Node<E> next;		// referennce to the subsequent Node in the list
+
+		public Node(E e, Node<E> n) { // constructor
+			element = e;
+			next = n;
+		}
+		public E getElement() { return element;	}
+		public Node<E> getNext() { return next; }
+		public void setNext(Node<E> n) { next = n;}
+	}
+	private Node<E> head = null;
+	private Node<E> tail = null;
+	private int size = 0;
+
+	public int size() { return size;}
+	public boolean isEmpty() { return size==0; }
+
+	/** returns the first element of the list */
+	public E first() { 
+		if (isEmpty()) {
+			return null; 
+		}
+		return head.getElement();
+	}
+	/** returns the last element of the list */
+	public E last() { 
+		if (isEmpty()) {
+			return null; 
+		}
+		return tail.getElement();
+	}
+    /** add an element to the head of the list */
+	public void addFirst(E e) {
+		head = new Node<>(e, head);			// assign e to the head of the list
+		if (size == 0)
+			tail = head;           		    // special case where the list is empty and head and tail are the same
+		size++;
+	}
+	/** add an element to the tail of the list*/
+	public void addLast(E e) {
+		Node<E> newest = new Node<>(e, null); // create new node
+		if (isEmpty())
+			head = newest;                   // special case where the list is empty and head and tail are the same
+		else
+			tail.setNext(newest);			// set the next node for the current tail 
+		tail = newest;						// set newest to be the tail
+		size++;
+	}
+	/** remove the first element from the list */
+	public E removeFirst() {
+		if (head == null) return null; 		// special case where the list is empty
+		E element = head.getElement();      // create the return value, the element associated with the current head
+		head = head.getNext();				// set the next node to head
+		size--;
+		return element;
+
+	}
+}
