@@ -1,0 +1,89 @@
+package Arrays_And_LinkLists;
+
+
+/**
+ * Class for the generation of a circulary linked list 
+ * A  circulary linked list is a collection of nodes that collectively form a circular sequence
+ * Useful for round-robin scheduling
+ * This data structure saves on the singular linked list as we only need to keep track of the tail. 
+ * The head can be infered from the tail
+ * The only added feature is rotate()
+ * 
+ * @author Lau Sandt
+ * https://github.com/lausandt/Java
+ *
+ */
+
+public class CLinkedList<E> {
+	/** nested class node */
+	private static class Node<E> {
+		private E element;								// reference to the element stored at this Node
+		private Node<E> next;							// reference to the subsequent Node in the list
+
+		public Node(E e, Node<E> n) { 
+			element = e;
+			next = n;
+		}
+		/** return the elemt associated with the node */
+		public E getElement() { return element;	}
+		/** return the next node associated with this node */
+		public Node<E> getNext() { return next; }
+		/** set the next node to be associated with this node */
+		public void setNext(Node<E> n) { next = n;}
+	}
+
+	private Node<E> tail = null;
+	private int size = 0;
+
+	/** returns the size of the list */
+	public int size() { return size;}
+
+	/** returns true if the list is empty */
+	public boolean isEmpty() { return size==0; }
+
+	/** returns the first element of the list */
+	public E first() { 
+		if (isEmpty()) {
+			return null; 									// special case for the empty list 
+		}
+		return tail.getNext().getElement(); 				// the first node is the element tail refers to.
+	}
+	/** returns the last element of the list */
+	public E last() { 
+		if (isEmpty()) {
+			return null; 
+		}
+		return tail.getElement();
+	}
+	/** moves the first element to the last of the list */
+	public void rotate(Node<E> n) {
+		if (tail != null)
+			tail = tail.getNext();
+	}
+	/** add an element to head of the list */
+	public void addFirst(E e) {	
+		if (tail == null) {									// special case for when the list is empty
+			tail = new Node<>(e, null);	
+			tail.setNext(tail);
+		}
+		else {			
+			Node<E> first = new Node<>(e, tail.getNext());
+			tail.setNext(first); 							// assign e to the head of the list
+		}
+		size++;
+	}
+	/** add an element to the tail of the list*/
+	public void addLast(E e) {
+        addFirst(e);
+        tail = tail.getNext();					
+		size++;
+	}
+	/** remove the first element from the list */
+	public E removeFirst() {
+		if (tail == null) return null; 				  		// special case where the list is empty
+		E element = tail.getNext().getElement();      		// create the return value, the element associated with the current first on the list
+		tail.setNext(tail.getNext().getNext()); 	  		// set the next node for tail
+		size--;
+		return element;
+	}
+}
