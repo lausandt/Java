@@ -1,13 +1,8 @@
-package Arrays_And_LinkLists;
-
 /**
  * Class for the generation of a singly linked list 
  * A singly linked list is a collection of nodes that collectively form a linear sequence
  * Each node in the list stores a reference to an object that is an element of the sequence
- * Furthermore each node stores a reference to the next node of the list or to null
- * A singly linked list has the advantage that it can grow indefinitely 
- * but it has two major drawbacks elements in the middle of the list can't be accessed or removed
- * Only the head of the list can be removed (the tail has no reference to the node before it)
+ * Furthermore each node stores a reference to the next node of the list
  * 
  * @author Lau Sandt
  * https://github.com/lausandt/Java
@@ -16,10 +11,10 @@ package Arrays_And_LinkLists;
 public class SLinkedList<E> {
 	// nested class Node
 	private static class Node<E> {
-		private E element;			// reference to the element stored at this Node
-		private Node<E> next;			// reference to the subsequent Node in the list
+		private E element;		// reference to the element stored at this Node
+		private Node<E> next;		// referennce to the subsequent Node in the list
 
-		public Node(E e, Node<E> n) { 		// constructor
+		public Node(E e, Node<E> n) { 
 			element = e;
 			next = n;
 		}
@@ -30,11 +25,8 @@ public class SLinkedList<E> {
 	private Node<E> head = null;
 	private Node<E> tail = null;
 	private int size = 0;
-	
-        /** returns the size of the list*/
+
 	public int size() { return size;}
-	
-	/** returns True if the list is empty */
 	public boolean isEmpty() { return size==0; }
 
 	/** returns the first element of the list */
@@ -51,30 +43,72 @@ public class SLinkedList<E> {
 		}
 		return tail.getElement();
 	}
-    /** add an element to the head of the list */
+	/** add an element to the head of the list */
 	public void addFirst(E e) {
-		head = new Node<>(e, head);			// assign e to the head of the list
+		head = new Node<>(e, head);         // assign e to the head of the list
 		if (size == 0)
-			tail = head;           		    	// special case where the list is empty and head and tail are the same
+			tail = head;                // special case where the list is empty and head and tail are the same
 		size++;
 	}
 	/** add an element to the tail of the list*/
 	public void addLast(E e) {
-		Node<E> newest = new Node<>(e, null); // create new node
+		Node<E> newest = new Node<>(e, null);   
 		if (isEmpty())
-			head = newest;                   	// special case where the list is empty and head and tail are the same
+			head = newest;              // special case where the list is empty and head and tail are the same
 		else
-			tail.setNext(newest);			// set the next node for the current tail 
-		tail = newest;					// set newest to be the tail
+			tail.setNext(newest);	    // set the next node for the current tail 
+		tail = newest;			    // set newest to be the tail
 		size++;
 	}
 	/** remove the first element from the list */
 	public E removeFirst() {
-		if (head == null) return null; 			// special case where the list is empty
-		E element = head.getElement();      		// create the return value, the element associated with the current head
-		head = head.getNext();				// set the next node to head
+		if (head == null) return null; 	    // special case where the list is empty
+		E element = head.getElement();      // create the return value, the element associated with the current head
+		head = head.getNext();		    // set the next node to head
 		size--;
 		return element;
 
+	}
+	public Node<E> penultimate(){
+		if (head==null) return null;        // special case where the list is empty 
+		Node<E> next = head;      	    // start with the head of the list 
+		Node<E> prev = null;                // set prev to null as head is the first of the list
+		while (next.getNext() != null)	    // update next and prev to the next in the list while the logic holds
+			next = next.getNext();
+		prev = next;
+		return prev;
+	}
+	@SuppressWarnings("rawtypes")
+	public boolean equals(Object o) {
+		if (o == null) return false;
+		if (getClass() != o.getClass()) return false;
+		SLinkedList other = (SLinkedList) o;
+		if (size != other.size) return false;
+		Node walkA = head;
+		Node walkB = other.head;
+		while (walkA != null) {
+			if (! walkA.getElement().equals(walkB.getElement())) return false;
+			walkA = walkA.getNext();
+			walkB = walkB.getNext();
+		}
+		return true;
+	}
+
+	public SLinkedList<E> clone() throws CloneNotSupportedException {
+		// creating the initial copy using Object.clone() (here super)
+		@SuppressWarnings("unchecked")
+		SLinkedList<E> other = (SLinkedList<E>) super.clone();
+		if (size > 0) {
+			other.head = new Node<>(head.getElement(), null);
+			Node<E> walk = head.getNext(); 		// walk through the rest of the list
+			Node<E> otherTail = other.head; 	// saving the most recently created node
+			while (walk != null) {
+				Node<E> newest = new Node<>(walk.getElement(), null);
+				otherTail.setNext(newest);  	// setting the newest Node to be next node for the second to newest node
+				otherTail = newest;             // setting the newest node to be the last node
+				walk = walk.getNext();          // getting the next noode from the original
+			}
+		}
+		return other;
 	}
 }
