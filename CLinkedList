@@ -1,4 +1,3 @@
-package Arrays_And_LinkLists;
 
 
 /**
@@ -18,8 +17,8 @@ package Arrays_And_LinkLists;
 public class CLinkedList<E> {
 	/** nested class node */
 	private static class Node<E> {
-		private E element;						// reference to the element stored at this Node
-		private Node<E> next;						// reference to the subsequent Node in the list
+		private E element;				// reference to the element stored at this Node
+		private Node<E> next;			        // reference to the subsequent Node in the list
 
 		public Node(E e, Node<E> n) { 
 			element = e;
@@ -56,7 +55,7 @@ public class CLinkedList<E> {
 		}
 		return tail.getElement();
 	}
-	/** moves the first element to the last of the list */
+	/** moves the first node to the last of the list */
 	public void rotate(Node<E> n) {
 		if (tail != null)
 			tail = tail.getNext();
@@ -69,7 +68,7 @@ public class CLinkedList<E> {
 		}
 		else {			
 			Node<E> first = new Node<>(e, tail.getNext());
-			tail.setNext(first); 					// assign e to the head of the list
+			tail.setNext(first); 				      // assign e to the head of the list
 		}
 		size++;
 	}
@@ -81,10 +80,46 @@ public class CLinkedList<E> {
 	}
 	/** remove the first element from the list */
 	public E removeFirst() {
-		if (tail == null) return null; 				   	// special case where the list is empty
-		E element = tail.getNext().getElement();      			// create the return value, the element associated with the current first on the list
-		tail.setNext(tail.getNext().getNext()); 	  		// set the next node for tail
+		if (tail == null) return null; 				// special case where the list is empty
+		E element = tail.getNext().getElement();      		// create the return value, the element associated with the current first on the list
+		tail.setNext(tail.getNext().getNext()); 	        // set the next node for tail
 		size--;
 		return element;
 	}
+	@SuppressWarnings("rawtypes")                                   // method uses nonparameterised type
+	public boolean equals(Object o) {
+		if (o == null) return false;                            // only null equals null
+		if (getClass() != o.getClass()) return false;           // for an object to be the same it must belong to the same class
+		CLinkedList other = (CLinkedList) o;
+		if (size != other.size) return false;                   // easy check
+		Node walkA = tail.getNext();
+		Node walkB = other.tail.getNext();
+		while (walkA != tail ) {      
+			if (! walkA.getElement().equals(walkB.getElement())) return false;
+			walkA = walkA.getNext();
+			walkB = walkB.getNext();
+		}
+		return true;
+	}
+	
+	public CLinkedList<E> clone() throws CloneNotSupportedException {
+		// creating the initial copy using Object.clone() (here super)
+		@SuppressWarnings("unchecked")
+		CLinkedList<E> other = (CLinkedList<E>) super.clone(); // safe cast 
+		if (size > 0) {
+			other.tail = new Node<>(tail.getElement(), null); 
+			Node<E> walk = tail.getNext(); 		// walk through the rest of the list
+			Node<E> otherTail = other.tail; 	// saving the tail so it can be updated last
+			Node<E> currentHead = otherTail;	// saving the most recently created node as the current head
+			while (walk != tail) {
+				Node<E> newest = new Node<>(walk.getElement(), currentHead); // creating a new node with the current head as next node
+				currentHead = newest;                                        // setting the newest node to be the current head
+				walk = walk.getNext();                                       // getting the next node from the original
+			}
+			otherTail.setNext(currentHead);     // setting the current head as next node of the tail and so completing the circle
+		}
+		return other;
+	}
+
+
 }
