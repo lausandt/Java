@@ -1,0 +1,57 @@
+package stacks_queues;
+
+/**
+ * Circular queue
+ * circularity is achieved by modulo arithmetic
+ * @author Lau Sandt
+ * https://github.com/lausandt/Java
+ * @param <E> Java generics framework
+ */
+
+public class ArrayQueue<E> implements Queue<E> {
+	
+	//instance variables
+	E[] data;           							          // underlying generic array
+	private int first 					        = 0;		// tracker, tracks position of the first element of the queue in the underlying array
+	private int size 					          = 0;    // the number of elements in the queue
+	private final static int CAPACITY 	= 1000; // the standard capacity of the queue
+
+	// constructors 
+	public ArrayQueue() {
+		this(CAPACITY);
+	}
+
+	@SuppressWarnings("unchecked")
+	public ArrayQueue(int cap) {
+		data = (E[]) new Object[cap];
+	}
+
+	// methods
+	@Override
+	public int size() { return size; }
+
+	@Override
+	public boolean isEmpty() { return size==0; }
+
+	@Override
+	public E first() { return data[first]; }
+
+	@Override
+	public void enqueue(E e) throws IllegalStateException {
+		if (size == data.length) throw new IllegalStateException("The queue is full!");
+		int avail = (first+size) % data.length;  // modulo arithmetic
+		data[avail] = e;
+		size++;
+	}
+
+	@Override
+	public E dequeue() {
+		if (isEmpty()) return null;
+		E result = data[first];
+		data[first] = null;
+		first = (first+1) % data.length;  		// modulo arithmetic
+		size--;
+		return result;
+	}
+
+}
