@@ -1,0 +1,41 @@
+package stacks_queues;
+
+/**
+ * Interface for last-in-first-out data structure 
+ * similar to java.util.Stack
+ * @author Lau Sandt
+ * https://github.com/lausandt/Java
+ *
+ */
+public interface Stack<E> {
+	
+	/** 
+	 * Returns the number of elements in the stack
+	 * @return elements in the stack
+	 */
+	int size();
+	
+	/**
+	 * Test if the stack is empty
+	 * @return true if the stack is empty, false otherwise
+	 */
+	boolean isEmpty();
+	
+	/**
+	 * Inserts an element on top of the stack
+	 * @param e the element to be inserted
+	 */
+	void push(E e);
+	
+	/**
+	 * Removes the element that is on top of the stack
+	 * @return the removed element
+	 */
+	E pop();
+	
+	/**
+	 * Show the element on top of the stack, does not remove the element
+	 * @return the element on top of the stack (or null if empty)
+	 */
+	E top();
+}
