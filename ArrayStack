@@ -1,0 +1,65 @@
+package stacks_queues;
+
+public class ArrayStack<E> implements Stack<E> {
+	
+	public static final int CAP = 1000;
+	private E[] data;
+	private int t = -1;
+	
+	public ArrayStack() {this(CAP);}
+	@SuppressWarnings("unchecked")
+	public ArrayStack(int capacity) {
+		data = (E[]) new Object[capacity];
+	}
+	
+
+	@Override
+	public int size() {
+		return t+1;
+	}
+
+	@Override
+	public boolean isEmpty() { return (t==-1);}
+
+	@Override
+	public void push(E e) throws IllegalStateException {
+		if (size() == data.length) throw new IllegalStateException("Stack is full");
+		data[++t]=e;	// upping t with 1 and then adding data at t  
+	}
+
+	@Override
+	public E pop() {
+		if (isEmpty()) return null;
+		E res = data[t];
+		data[t] = null;  // set it to null to assist garbage collection
+		t--;
+		return res;
+	}
+
+	@Override
+	public E top() {
+		if (isEmpty()) return null;
+		return data[t];
+	}
+	
+	public static void main(String[] args) {
+		
+		Stack<Integer> S = new ArrayStack<>();
+		
+		S.push(5);
+		S.push(3);
+		
+		System.out.println(S.top());
+		System.out.println(S.isEmpty());
+		System.out.println(S.size());
+		S.pop();
+		System.out.println(S.top());
+		System.out.println(S.isEmpty());
+		System.out.println(S.size());
+		S.pop();
+		System.out.println(S.top());
+		System.out.println(S.isEmpty());
+		System.out.println(S.size());
+	}
+
+}
