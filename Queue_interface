@@ -1,0 +1,41 @@
+package stacks_queues;
+
+/**
+ * Interface for creating a queue that adheres to the first in first out principle unlike Java.util.Queue 
+ * @author Lau Sandt
+ * https://github.com/lausandt/Java
+ * @param <E> Java generics framework
+ */
+
+public interface Queue<E> {
+	
+	/**
+	 * returns the number of elements in the queue (not the same as length of the underlying datastructure)
+	 * @return the number of elements in the queue
+	 */
+	int size();
+	
+	/**
+	 * tests if the queue is empty
+	 * @return true if the queue is empty, otherwise false
+	 */
+	boolean isEmpty();
+	
+	/**
+	 * finds and returns the first element of the queue without removing it
+	 * @return the first element of the queue
+	 */
+	E first();
+	
+	/**
+	 * Adds an element at the end of a queue
+	 * @param e the elemented added
+	 */
+	void enqueue(E e);
+	
+	/**
+	 * finds, returns and removes the first element of the queque
+	 * @return the first element of the queque
+	 */
+	E dequeue();
+	
