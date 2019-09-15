@@ -53,5 +53,49 @@ public class ArrayQueue<E> implements Queue<E> {
 		size--;
 		return result;
 	}
+	
+		public static void main(String[] args) {
+		
+		ArrayQueue<Integer> I = new ArrayQueue<>();
+		
+		I.enqueue(7);
+		System.out.println(I.isEmpty());
+		System.out.println(I.size());
+		System.out.println(I.first());
+		
+		
+		I.enqueue(9);
+		System.out.println(I.isEmpty());
+		System.out.println(I.size());
+		System.out.println(I.first());
+		
+		
+		I.dequeue();
+		System.out.println(I.isEmpty());
+		System.out.println(I.size());
+		System.out.println(I.first());
+		
+		I.dequeue();
+		System.out.println(I.isEmpty());
+		System.out.println(I.size());
+		System.out.println(I.first());
+		
+		I.enqueue(3);
+		System.out.println(I.isEmpty());
+		System.out.println(I.size());
+		System.out.println(I.first());
+		
+		I.enqueue(229);
+		System.out.println(I.isEmpty());
+		System.out.println(I.size());
+		System.out.println(I.first());
+		
+		I.enqueue(9);
+		System.out.println(I.isEmpty());
+		System.out.println(I.size());
+		System.out.println(I.first());
+		
+		
+	}
 
 }
