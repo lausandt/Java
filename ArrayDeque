@@ -1,0 +1,132 @@
+/**
+ * 
+ */
+package stacks_queues;
+
+/**
+ * Circular implementation of a double ended queue
+ * Circularity is achieved by modulo arithmetic
+ * @author Lau Sandt
+ * https://github.com/lausandt/Java
+ */
+public class ArrayDeque<E> implements Deque<E>{
+	
+	// instance variables
+	private E[] data;
+	private int first = 0;
+	private int size = 0;
+	
+	// standard capacity only used with an empty constructor
+	private static final int CAPACITY = 1000;
+	
+	// constructors
+	public ArrayDeque() { this(CAPACITY);}
+	
+	@SuppressWarnings("unchecked")
+	public ArrayDeque(int cap) {
+		data = (E[]) new Object[cap];
+	}
+
+
+	@Override
+	public void addFirst(E element) throws IllegalStateException {
+		// check if the queue is full
+		if (size == data.length) throw new IllegalStateException("queue is full");
+		
+		// update first to the position that is one before first taking into account not to get negative numbers
+		first = (first -1 + data.length) % data.length;
+		// add the element
+		data[first] = element;
+		// update size
+		size++;		
+	}
+
+	@Override
+	public void addLast(E element) throws IllegalStateException {
+		if (size == data.length) throw new IllegalStateException("queue is full");
+		int last = (first + size) % data.length;
+		data[last] = element;
+		size++;
+	}
+
+	@Override
+	public E removeFirst() {
+		if (isEmpty()) return null;
+		E result = data[first];
+		data[first] = null;
+		first = (first + 1) % data.length;
+		size--;
+		return result;
+	}
+
+	@Override
+	public E removeLast() {
+		if (isEmpty()) return null;
+		int last = (first + size-1) % data.length;
+		E result = data[last];
+		data[last] = null;
+		size--;
+		return result;
+	}
+
+	@Override
+	public E first() { return data[first]; }
+
+	@Override
+	public E last() { 
+		// the last is one position before first + size
+		int last = (first + size -1 ) % data.length; 
+		return data[last];
+		}
+
+	@Override
+	public int size() { return size;}
+
+	@Override
+	public boolean isEmpty() { return size == 0; }
+
+	public static void main(String[] args) {
+		
+		ArrayDeque<Integer> S = new ArrayDeque<>();
+		
+		S.addFirst(1);
+		S.addLast(9);
+		System.out.println("the size is " + S.size());
+		System.out.println("is this queue empty? " + S.isEmpty());
+		System.out.println("The first in the queue is " + S.first());
+		System.out.println("The last in the queue is " + S.last());
+		
+		S.addFirst(2);
+		System.out.println("the size is " + S.size());
+		System.out.println("is this queue empty? " + S.isEmpty());
+		System.out.println("The first in the queue is " + S.first());
+		System.out.println("The last in the queue is " + S.last());
+		
+		S.removeLast();
+		System.out.println("the size is " + S.size());
+		System.out.println("is this queue empty? " + S.isEmpty());
+		System.out.println("The first in the queue is " + S.first());
+		System.out.println("The last in the queue is " + S.last());
+		
+		S.addLast(5);
+		System.out.println("the size is " + S.size());
+		System.out.println("is this queue empty? " + S.isEmpty());
+		System.out.println("The first in the queue is " + S.first());
+		System.out.println("The last in the queue is " + S.last());
+		
+		S.removeFirst();
+		System.out.println("the size is " + S.size());
+		System.out.println("is this queue empty? " + S.isEmpty());
+		System.out.println("The first in the queue is " + S.first());
+		System.out.println("The last in the queue is " + S.last());
+		
+		S.removeFirst();
+		System.out.println("the size is " + S.size());
+		System.out.println("is this queue empty? " + S.isEmpty());
+		System.out.println("The first in the queue is " + S.first());
+		System.out.println("The last in the queue is " + S.last());
+		
+		
+
+	}
+}
