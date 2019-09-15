@@ -11,10 +11,10 @@ package stacks_queues;
 public class ArrayQueue<E> implements Queue<E> {
 	
 	//instance variables
-	E[] data;           							          // underlying generic array
-	private int first 					        = 0;		// tracker, tracks position of the first element of the queue in the underlying array
-	private int size 					          = 0;    // the number of elements in the queue
-	private final static int CAPACITY 	= 1000; // the standard capacity of the queue
+	E[] data;           			  // underlying generic array
+	private int first = 0;		          // tracker, tracks position of the first element of the queue in the underlying array
+	private int size  = 0;                    // the number of elements in the queue
+	private final static int CAPACITY = 1000; // the standard capacity of the queue
 
 	// constructors 
 	public ArrayQueue() {
