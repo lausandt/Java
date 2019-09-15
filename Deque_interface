@@ -1,0 +1,66 @@
+package stacks_queues;
+
+/**
+ * Interface for a double ended queue -> a queue where elements can be added at the beginning and the end
+ * @author Lau Sandt
+ * https://github.com/lausandt/Java
+ * @param <E> Java generics framework
+ */
+
+public interface Deque<E> {
+	
+	// update methods
+	
+	/**
+	 * adds an element to the head of the queue
+	 * @param element, the element to be added 
+	 */
+	void addFirst(E element);
+	
+	/**
+	 * add an element to the tail of the queue
+	 * @param element, the element to be added
+	 */
+	void addLast(E element);
+	
+	/**
+	 * removes the element at the head of the queue
+	 * @return the first element of the queue, null if empty
+	 */
+	E removeFirst();
+	
+	/**
+	 * removes the element at the tail of the queue
+	 * @return the last element of the queue, null if empty
+	 */
+	E removeLast();
+	
+	// accessors
+	
+	/**
+	 * Shows but does not remove the element on the head of the queue
+	 * @return the first element of the queue, null if empty
+	 */
+	E first();
+	
+	/**
+	 * Shows but does not remove the element on the head of the queue
+	 * @return the last element of the queue, null if empty
+	 */
+	E last();
+	
+	/**
+	 * returns the element count of the queue, not the same as the length of the underlying datastructure
+	 * @return the number of elements in the queue
+	 */
+	int size();
+	
+	/**
+	 * Tests if the queue is empty
+	 * @return true if the queue has no elements, false otherwise
+	 */
+	boolean isEmpty();
+	
+	
+
+}
