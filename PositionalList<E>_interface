@@ -43,7 +43,7 @@ public interface PositionalList<E> {
    Position<E> addAfter(Position<E>p, E e) throws IllegalArgumentException;
    
    /** Replaces the element at position p with element e, returning the replaced element. */
-   Position<E> set(Position<E>p, E e) throws IllegalArgumentException;
+   E set(Position<E>p, E e) throws IllegalArgumentException;
    
    /** Removes and returns the element at position p, invalidating position p */
    E remove(Position<E> p) throws IllegalArgumentException; 
