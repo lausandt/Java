@@ -6,6 +6,7 @@ package list_abstractions;
 
 /**
  * Implementation of a positional based list
+ * all operations run in worst-case constant time 
  * @author Lau Sandt
  * https://github.com/lausandt/Java
  *
