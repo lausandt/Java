@@ -1,0 +1,165 @@
+/**
+ * 
+ */
+package list_abstractions;
+
+
+/**
+ * Implementation of a positional based list
+ * @author Lau Sandt
+ * https://github.com/lausandt/Java
+ *
+ */
+public class LinkedPositionalList<E> implements PositionalList<E>{
+	
+	//-------------nested Node class -------------------------
+	@SuppressWarnings("hiding")
+	private class Node<E> implements Position<E>{
+		
+		// instance variables
+		private E element;								// the element stored at this Node
+		private Node<E> prev;							// the previous Node in the list
+		private Node<E> next;							// the next Node in the list
+		
+		
+		// constructor
+		public Node(E e, Node<E> p, Node<E> n) {
+			element = e;
+			prev = p;
+			next = n;
+		}
+
+		@Override
+		public E getElement() throws IllegalStateException {
+			if (next == null) throw new IllegalStateException("Position no longer valid");
+			return element;
+		}
+		public void setElement(E element) { this.element = element; }
+		
+		/** return the next node associated with this node */
+		public Node<E> getNext() { return next; }
+		
+		/** return the previous node associated with this node */
+		public Node<E> getPrev(){return prev;}
+		
+		/** set the next node to be associated with this node */
+		public void setNext(Node<E> n) { next = n;}
+		
+		/** set the preceeding node to be associated with this node */
+		public void setPrev(Node<E> p) {prev = p;}
+		
+	}//------------- end nested Node class -------------------------
+	
+	// instance variables 
+	private Node<E> header;
+	private Node<E> trailer;
+	private int size = 0;
+	
+	// constructs a new empty list
+	public LinkedPositionalList(){
+		header = new Node<>(null, null,null);
+		trailer = new Node<>(null, header, null);
+		header.setNext(trailer);
+	}
+	
+	// Accessors 
+	
+	// Utility methods for accessors
+	
+	/** Validates the position and returns it as a node */
+	private Node<E> validate(Position<E> p) throws IllegalArgumentException {
+		if(!(p instanceof Node)) throw new IllegalArgumentException("Invalid position");
+		Node<E> node = (Node<E>) p;
+		if (node.getNext() == null)  // convention for a defunct node
+			throw new IllegalArgumentException("defunct position");
+		return node;
+	}
+	
+	/** Returns a Node as a Position or as null if it is a sentinel */
+	private Position<E> position(Node<E> node){
+		if (node==header || node==trailer) return null;
+		return node;
+	}
+	
+
+	@Override
+	public int size() { return size; }
+
+	@Override
+	public boolean isEmpty() { return size == 0; }
+
+	@Override
+	public Position<E> first() { return position(header.getNext());	}
+
+	@Override
+	public Position<E> last() { return position(trailer.getPrev()); }
+
+	@Override
+	public Position<E> before(Position<E> p) throws IllegalArgumentException {
+		Node<E> res = validate(p);
+	   return position(res.getPrev()); // position will ensure this will return null if prev is header
+	}
+
+	@Override
+	public Position<E> after(Position<E> p) throws IllegalArgumentException {
+		Node<E> res = validate(p);
+		return position(res.getNext());  // position will ensure this will return null if next is trailer
+	}
+	
+	// Update methodes
+	
+	// private utilities for update methods
+	
+	/** method to add a node to the list */
+	private Position<E> addBetween(E e, Node<E> predecessor, Node<E> successor) {
+		Node<E> newest = new Node<>(e, predecessor, successor);
+		predecessor.setNext(newest);
+		successor.setPrev(newest);
+		size++;
+		return newest;
+	}
+
+	@Override
+	public Position<E> addFirst(E e) { return addBetween(e, header, header.getNext()); }
+
+	@Override
+	public Position<E> addLast(E e) { return addBetween(e, trailer, trailer.getPrev()); }
+
+	@Override
+	public Position<E> addBefore(Position<E> p, E e) throws IllegalArgumentException {
+		Node<E> res = validate(p);
+		return addBetween(e, res.getPrev(), res);
+	}
+
+	@Override
+	public Position<E> addAfter(Position<E> p, E e) throws IllegalArgumentException {
+		Node<E> res = validate(p);
+		return addBetween(e, res, res.getNext());
+	}
+
+	@Override
+	public E set(Position<E> p, E e) throws IllegalArgumentException {
+		Node<E> node = validate(p);
+		E answer = node.getElement();
+		node.setElement(e);
+		return answer;
+	}
+
+	@Override
+	public E remove(Position<E> p) throws IllegalArgumentException {
+		//cleans up the list
+		Node<E> node = validate(p);
+		Node<E> predecessor = node.getPrev();
+		Node<E> successor = node.getPrev();
+		predecessor.setNext(successor);
+		successor.setPrev(predecessor);
+		size--;
+		// 
+		E answer = node.getElement();
+		node.setPrev(null);                // help with garabage collection
+		node.setNext(null);                // convention defunct node is that all are null
+		node.setElement(null);
+		return answer;
+	}
+
+}
