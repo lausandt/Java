@@ -17,7 +17,7 @@ public class LinkedPositionalList<E> implements PositionalList<E>{
 	private class Node<E> implements Position<E>{
 		
 		// instance variables
-		private E element;								// the element stored at this Node
+		private E element;							// the element stored at this Node
 		private Node<E> prev;							// the previous Node in the list
 		private Node<E> next;							// the next Node in the list
 		
