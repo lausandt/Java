@@ -1,0 +1,51 @@
+package list_abstractions;
+
+/**
+ * Interface for a position based list
+ * @author Lau Sandt
+ * https://github.com/lausandt/Java
+ * @param <E> generics framework
+ */
+
+public interface PositionalList<E> {
+   // accessors 	
+   
+   /** Returns the number of elements in the list */	
+   int size();
+   
+   /** Returns true if the list has no elements */
+   boolean isEmpty();
+   
+   /** Returns the position of the first element of the list (or null if empty) */
+   Position<E> first();
+   
+   /** Returns the position of the last element of the list (or null if empty) */
+   Position<E> last();
+   
+   /** Returns the position immediately before position p (or null if p is first) */
+   Position<E> before(Position<E> p) throws IllegalArgumentException;
+   
+   /** Returns the position immediately after position p (or null if p is last) */
+   Position<E> after(Position<E> p) throws IllegalArgumentException;
+   
+   // Update methods
+   
+   /** adds an element e on the front of the list, returning the position of the new element */
+   Position<E> addFirst(E e);
+   
+   /** adds an element e at the back of the list, returning the position of the new element */ 
+   Position<E> addLast(E e);
+   
+   /** inserts an element e in the list, just before position p, returning the position of the new element */
+   Position<E> addBefore(Position<E>p, E e) throws IllegalArgumentException;
+   
+   /** inserts an element e in the list, just after position p, returning the position of the new element */
+   Position<E> addAfter(Position<E>p, E e) throws IllegalArgumentException;
+   
+   /** Replaces the element at position p with element e, returning the replaced element. */
+   Position<E> set(Position<E>p, E e) throws IllegalArgumentException;
+   
+   /** Removes and returns the element at position p, invalidating position p */
+   E remove(Position<E> p) throws IllegalArgumentException; 
+   
+}
