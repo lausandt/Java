@@ -1,0 +1,39 @@
+package list_abstractions;
+
+/**
+* Alternatieve "eigen" list interface
+*/
+
+public interface Lijst<E> {
+	
+	/** returns the numbers of elements in the list. */
+	int size();
+	
+	/** tests if the list is empty. */
+	boolean isEmpty();
+	
+	/** Returns but does not remove the element at index i. */
+	E get(int i) throws IndexOutOfBoundsException;
+	
+	/** 
+	 * Sets element e at index i, returns the element that was replaced	
+	 * @param i the index
+	 * @param e the element that will be set
+	 * @return the element that was replaced
+	 */
+	E set(int i, E e) throws IndexOutOfBoundsException;
+	
+	/**
+	 * Inserts element e at index i shifting all subsequent elements one to the right
+	 * @param i the index
+	 * @param e the element
+	 */
+	void add(int i, E e) throws IndexOutOfBoundsException;
+	
+	/**
+	 * Remove the element at index i shifting all subsequent indices one to the left
+	 * @param i the index
+	 * @return the element that was removed
+	 */
+	E remove(int i) throws IndexOutOfBoundsException;
+}
