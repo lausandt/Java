@@ -81,6 +81,9 @@ public class LinkedPositionalList<E> implements PositionalList<E>{
 	}//------------ end nested PositionIterator class --------------
 	
 	//------------- nested PositionIterable class ------------------
+	/** allows for (Position<String> p : waitlist.positions())
+	* assuming that waitlist has type LinkedPositionList<String>
+	*/
 	private class PositionIterable implements Iterable<Position<E>>{
 		@Override
 		public Iterator<Position<E>> iterator() { return new PositionIterator(); }
