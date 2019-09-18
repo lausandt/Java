@@ -1,0 +1,119 @@
+package list_abstractions;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+/**
+ * Een alternatieve of "eigen" implementatie van ArrayList
+ */
+
+public class ArrayLijst<E> implements Lijst<E> {
+	
+	// instance variables
+	private E[] lijst;
+	private int size = 0;
+	private static final int CAPACITY = 100;
+	
+	// Constructors
+	public ArrayLijst() { this(CAPACITY);}
+
+
+	@SuppressWarnings("unchecked")
+	public ArrayLijst(int cap) {
+		lijst = (E[]) new Object[cap];
+	}
+
+	@Override
+	public int size() {	return size; }
+
+	@Override
+	public boolean isEmpty() { return size==0;	}
+
+	@Override
+	public E get(int i) throws IndexOutOfBoundsException {
+		checkIndex(i, size);
+		return lijst[i];
+	}
+
+	@Override
+	public E set(int i, E e) throws IndexOutOfBoundsException {
+		checkIndex(i, size);
+		E element = get(i);
+		lijst[i] = e;
+		return element;
+		
+	}
+
+	@Override
+	public void add(int i, E e) throws IndexOutOfBoundsException {
+		checkIndex(i, size+1);
+		if (size == lijst.length) resize(2*lijst.length);
+		for (int k = i; k < size -1; k++) {
+			lijst[k+1] = lijst[k];  // shifting all elements after i to the right
+		}
+		lijst[i] = e;
+		size++;
+	}
+
+
+	@Override
+	public E remove(int i) throws IndexOutOfBoundsException {
+		checkIndex(i, size); // will take care of the empty list as well
+		E element = lijst[i];  // return value 
+		for (int k = i; k < size -1; k++) {
+			lijst[k] = lijst[k+1]; // shifting elements to the left overwrites the element that needs to be removed
+		}
+		lijst[size-1] = null; // garbage collection
+		size--;
+		return element;
+	}
+	
+	protected void checkIndex(int i, int size) throws IndexOutOfBoundsException {
+		if (i< 0 || i >= size) throw new IndexOutOfBoundsException("illegal index" + i);		
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected void resize(int capacity) {
+		E[] temp = (E[]) new Object[capacity]; // creates a new list with the increased size
+		for (int j=0; j<size;j++) {
+			temp[j] = lijst[j];// fills the new list with the data from the current list
+		}
+		lijst = temp; // sets the current list to be the new list
+	}
+	
+	//---------------- nested ArrayIterator class -----------------------------
+	/**
+	 * A non statitic inner class 
+	 * Each instance of this iterator contains an implicit reference to the containing list and has access to its members
+	 */
+	private class ArrayIterator implements Iterator<E>{
+		private int j = 0;   				// index of the next element to report
+		private boolean removable = false; 	// can remove be called at this time
+
+		@Override
+		public boolean hasNext() { return j < size;	}  // only accessible when class ArrayIterator is not static
+
+		@Override
+		public E next() throws NoSuchElementException {
+			if (j==size) throw new NoSuchElementException("There is no next element");
+			removable = true;
+			return lijst[j++]; // gets data at index j and then adds 1 to j
+		}
+		/**
+		 * Removes the element returned by the most recent call to next
+		 * @throws IllegalArgumentException if next hasn't been called yet 
+		 */
+		public void remove() throws IllegalArgumentException{
+			if (!removable) throw new IllegalArgumentException("nothing to remove");
+			ArrayLijst.this.remove(j-1); 	//(wonderfully circular) j was update at next do we need j-1
+			j--;							// the next element has shifted one to the left
+			removable = false;	        	// only after next is called is an element removable	
+		}
+		
+	}
+	//--------------- end nested class --------------------------------------------
+	
+	/** return an iterator of the elements stored in the list */
+	public Iterator<E> iterator(){ return new ArrayIterator();	}
+
+}
