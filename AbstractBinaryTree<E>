@@ -1,0 +1,37 @@
+package trees;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import list_abstractions.Position;
+
+public abstract class AbstractBinaryTree<E> extends AbstractTree<E> implements BinaryTree<E> {
+	
+	/** Returns the position of the sibling of p (or null if p has no sibling)
+    Sibling of a position p is defined as having the same parent as p */
+	public Position<E> sibling(Position<E> p) {
+		Position<E> parent = parent(p);
+		if (parent == null) return null;  			// p must be the root
+		if (p == left(parent)) return right(parent);// p is the left child 
+		else return left(parent);					// p is the right child
+	}
+	
+	/** returns the children of position p, p has 0,1 or 2 children in a binary tree */
+	public int numChildren(Position<E> p) {
+		int count = 0;
+		if (left(p) != null)
+			count++;
+		if (right(p) != null)
+			count++;
+		return count;
+	}
+	
+	/** returns an iterable collection of the positions representing p's children */
+	public Iterable<Position<E>> children(Position<E> p){
+		List<Position<E>> snapshot = new ArrayList<>(2); // p can have max two children
+		if (left(p) != null) snapshot.add(left(p));      // if p has a left child add it
+		if (right(p) != null) snapshot.add(right(p));    // if p has a right child add it
+		return snapshot;
+	}
+
+}
