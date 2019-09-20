@@ -1,0 +1,56 @@
+package trees;
+
+/**
+ * interface for a binary tree
+ * A binary tree is an ordered tree with the following properties
+ * 1 Every node has at most two children 
+ * 2 Every child node is labeled as either left child or right child
+ * 3 A left child procedes a right child in the order of children of a node
+ * 
+ * A binary tree is proper if a node has zero or two children 
+ * Conversely a binary three that does not hold the above property is improper
+ * 
+ * A recursive binary Tree definition
+ * Base case: An empty tree
+ * A non empty tree having root r, which stores an element and has two binary trees that are the left and right subtrees of r
+ * one or both of these subtrees might be empty
+ * 
+ * Let T be a non empty binary tree 
+ * and let N, Ne, Ni and h denote, the number of nodes, the number of external nodes, the number of internal nodes and the height of T
+ * Then the following properties hold
+ * 1 ->  h+1 <= N <= 2^(h+1)-1 
+ * 2 -> 1 <= Ne <= 2^h
+ * 3 -> h <= Ni <= 2^h-1
+ * 4 -> log(N+1) - 1 <= h <= N-1
+ * 
+ * Also if T is proper the following properties hold
+ * 2h+1 <= N <= 2^(h+1)-1 
+ * h+1 <= Ne <= 2^h 
+ * h <= Ni <= 2^h - 1
+ * log(N+1) -1 <= h <= (N-1)/2
+ * 
+ * finally in a nonempty proper binary tree with Ne external nodes and Ni internal nodes the following property holds
+ * Ne = 1 + Ni
+ * 
+ * Warning
+ * The aforementioned properties do not hold , in general, for improper binary trees and nonbinary trees
+ * 
+ * @author Lau Sandt
+ * https://github.com/lausandt/Java
+ */
+
+import list_abstractions.Position;
+
+public interface BinaryTree<E> extends Tree<E> {
+	
+	/** Returns the position of the left child of p (or null if p has no left child) */
+	Position<E> left(Position<E> p) throws IllegalArgumentException;
+	
+	/**  Returns the position of the right child of p (or null if p has no right child) */
+	Position<E> right(Position<E> p) throws IllegalArgumentException;
+	
+	/** Returns the position of the sibling of p (or null if p has no sibling)
+        Sibling of a position p is defined as having the same parent as p */
+	Position<E> sibling(Position<E> p) throws IllegalArgumentException;
+	
+}
