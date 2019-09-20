@@ -1,0 +1,8 @@
+Binary Tree ADT
+
+left(p)		: Returns the position of the left child of p (or null if p has no left child)
+
+right(p)    : Returns the position of the right child of p (or null if p has no right child)
+
+sibling(p)  : Returns the position of the sibling of p (or null if p has no sibling)
+              Sibling of a position p is defined as having the same parent as p
