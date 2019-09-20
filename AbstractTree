@@ -1,0 +1,47 @@
+package trees;
+
+/**
+ * Abstract class for the Tree datastucture
+ * provides the generic functionality for all Tree implementations
+ * @author Lau Sandt
+ * https://github.com/lausandt/Java
+ */
+
+import list_abstractions.Position;
+
+public abstract class AbstractTree<E> implements Tree<E> {
+
+
+	@Override
+	public boolean isInternal(Position<E> p) throws IllegalArgumentException { return numChildren(p) > 0; }
+
+	@Override
+	public boolean isExternal(Position<E> p) throws IllegalArgumentException { return numChildren(p) == 0;}
+
+	@Override
+	public boolean isRoot(Position<E> p) throws IllegalArgumentException { return p == root();	}
+
+	@Override
+	public boolean isEmpty() { return size() == 0;}
+	
+	/** returns the depth of position p in the Tree */
+	public int depth(Position<E> p) {
+		// if p is the root then the dept of p = 0
+		if (p == root()) { 
+			return 0;
+		}
+		// otherwise the debt of p is 1 + the debt of the parent of p
+		return 1 + depth(parent(p));
+	}
+	
+	/** return the height of a tree */
+	public int height(Position<E> p) {
+		// if p is a leaf then the height of p = 0 and that of the tree is 1
+		int h = 0;
+		// otherwise the height of p is one more than the max of of the heights of p's children
+		for (Position<E> c : children(p))
+			h = Math.max(h, 1+height(c));
+		return h; 
+	}
+
+}
