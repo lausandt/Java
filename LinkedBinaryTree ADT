@@ -1,0 +1,22 @@
+LinkedBinaryTree ADT
+
+update methodes
+
+addRoot(e):			Creates a root for an empty tree, storing e as the element and returns the position of that root
+                	An error occurs if the tree is not empty
+
+addLeft(p,e):		Creates a left child of position p, storing element e and returns the position of the new node
+                	An error occurs if p already has a left child
+
+addRight(p,e):		Creates a right child of position p, storing element e and returns the position of the new node
+                	An error occurs if p already has a right child  
+                
+set(p,e):       	Replaces the stored element at position p with element e. Returns the previously stored element
+
+attach(p,T1,T2):	attaches the internal structure of trees T1 and T2 as the respective left and right subtrees of
+                    leaf position p and resets T1 and T2 to empty trees.
+                    An error occurs if p is not a leaf
+                    
+remove(p):			Removes the node at position p, replaces it with its child (if any)  and returns the element that
+                    was stored at p
+                    An error occurs if p has two children     
