@@ -1,0 +1,216 @@
+/**
+ * 
+ */
+package trees;
+
+import java.util.Iterator;
+
+import list_abstractions.Position;
+
+/**
+ * @author Lau Sandt
+ * github.com/lausandt/Java
+ *
+ */
+public class LinkedBinaryTree<E> extends AbstractBinaryTree<E> {
+
+	//-------- nested node Class --------
+	protected class Node<E> implements Position<E>{
+
+		// instance variables
+		private E element;			// the element that is stored at this node
+		private Node<E> parent;     // the parent of this node, null when it is the root
+		private Node<E> left;       // left child of this node, null if none
+		private Node<E> right;      // right child of this node, null if one
+
+		//constructor 
+		public Node(E element, Node<E> parent, Node<E> leftChild, Node<E> rightChild) {
+			this.element = 	element;
+			this.parent  = 	parent;
+			left         = 	leftChild;
+			right        =  rightChild;
+		}
+
+		// getters
+		public Node<E> getParent(){ return parent; }
+		public Node<E> getLeft(){ return left; }
+		public Node<E> getRight(){ return right; }
+		@Override
+		public E getElement() throws IllegalStateException { return element; }
+
+		// setters 
+		public void setParent(Node<E> p) { parent = p; }
+		public void setLeft(Node<E> l) { left = l; }
+		public void setRight(Node<E> r) { right = r; }
+		public void setElement(E e) { element = e; }
+
+
+	}//------- end nested class ---------
+
+	/** factory method to create a new node storing element e */
+	protected Node<E> createNode(E element, Node<E> parent, Node<E> leftChild, Node<E> rightChild){
+		return new Node(element, parent, leftChild, rightChild);
+	}
+
+	// instance variables
+	protected Node<E> root = null;		// the root of the tree 
+	protected int size     = 0;			// the number of nodes in the tree
+
+	// constructor
+	public LinkedBinaryTree() {};
+
+	// internal helper methods	
+	/** validate the position and returns it as a node
+	 *  is called by all methods that use a position as parameter */
+	protected Node<E> validate(Position<E> p) throws IllegalArgumentException{
+		// check if parameter p is indeed a node
+		if (!(p instanceof Node)) throw new IllegalArgumentException("This is an invalid position!");
+		// safe cast position P to node
+		Node<E> node = (Node<E>) p;
+		// when removing a node from a tree we set the parent pointer to itself 
+		if (node.getParent() == node ) throw new IllegalArgumentException("Position p is no longer in the tree!");
+		return node;		
+	}
+
+
+	// accessors 
+	@Override
+	public int size() { return size(); }
+
+	@Override
+	public Position<E> root() { return root; }
+
+
+	@Override
+	public Position<E> left(Position<E> p) throws IllegalArgumentException { return validate(p).getLeft(); }
+
+	@Override
+	public Position<E> right(Position<E> p) throws IllegalArgumentException { return validate(p).getRight(); }
+
+	@Override
+	public Position<E> parent(Position<E> p) throws IllegalArgumentException { return validate(p).getParent(); }
+
+	// update methods	
+	/** Creates a root for an empty tree, storing e as the element and returns the position of that root
+	 *   An error occurs if the tree is not empty */
+	public Position<E> addRoot(E element) throws IllegalStateException { 
+		// every tree can have only one root
+		if (root != null ) throw new IllegalStateException("This tree already has a root!");
+		// using the factory to create the root
+		return createNode(element, null, null, null);
+	}
+
+	/** 
+	 * Creates a left child of position p, storing element e and returns the position of the new node
+	 *  An error occurs if p already has a left child 
+	 */
+	public Position<E> addLeft(Position<E> p, E element) throws IllegalStateException {
+		// change the position p to node parent
+		Node<E> parent = validate(p);
+		// check if the parent doesn't have a left child
+		if (parent.getLeft() != null) throw new IllegalStateException("This position already has a left child");
+		// create the new node child
+		Node<E> child = createNode(element, parent, null, null);
+		// set this node to be the left child of the parent
+		parent.setLeft(child);	
+		size++;
+		return child;
+	}
+
+	/** 
+	 * Creates a right child of position p, storing element e and returns the position of the new node
+	 *  An error occurs if p already has a right child 
+	 */
+	public Position<E> addRight(Position<E> p, E element) throws IllegalStateException {
+		// change the position p to node parent
+		Node<E> parent = validate(p);
+		// check if the parent doesn't have a left child
+		if (parent.getRight() != null) throw new IllegalStateException("This position already has a right child");
+		// create the new node child
+		Node<E> child = createNode(element, parent, null, null);
+		parent.setRight(child);
+		size++;
+		return child;
+	}
+
+	/** Replaces the stored element at position p with element e. Returns the previously stored element */
+	public E set(Position<E> p, E element) {
+		// change position p to node
+		Node<E> node = validate(p);
+		// return value is the current element of node
+		E value = node.getElement();
+		// set the new element
+		node.setElement(element);
+		return value;
+	}
+	/** 
+	 * Removes the node at position p, replaces it with its child (if any)  and returns the element that was stored at p
+	 * An error occurs if p has two children     
+	 */
+	public E remove(Position<E> p) throws IllegalStateException {
+
+		Node<E> node = validate(p);  // change position p to node
+		E value = node.getElement(); // get and store the current element of node
+		if (numChildren(p) == 2) throw new IllegalStateException("Position has 2 children");
+		// ternary operator: result = testCondition ? trueValue : falseValue
+		Node<E> child = (node.getLeft() != null ? node.getLeft() : node.getRight());
+		if (child != null) { // in a binary tree a parent has 0 1 2 children the last has been tested the first is possible
+			child.setParent(node.getParent());
+		}
+		if (node == root) {  // if node is the root child has to become the root
+			child = root;
+		}
+		else {
+			if (node == node.getParent().getLeft()) { // set the child in the place of node
+				node.getParent().setLeft(child);
+			}
+			else {
+				node.getParent().setRight(child);
+			}
+		}	
+
+		node.setParent(node); // the convention for removing the child is to make a circular reference
+		node.setElement(null); // garabage collection
+		node.setLeft(null);
+		node.setRight(null);
+
+		size--;
+		return value;
+	}
+
+	/** 
+	 * attaches the internal structure of trees T1 and T2 as the respective left and right subtrees of leaf position p
+	 * and resets T1 and T2 to empty trees.
+	 * An error occurs if p is not a leaf
+	 */
+	public void attach(Position<E> p,LinkedBinaryTree<E> t1,LinkedBinaryTree<E> t2) throws IllegalArgumentException{
+		Node<E> node = validate(p);
+		if (isInternal(p)) throw new IllegalArgumentException("This position already has children");
+		size += t1.size() + t2.size();  // new size 
+		if (!t1.isEmpty()) {            
+			t1.root.setParent(node);
+			node.setLeft(t1.root);
+			t1.root = null;             // clear the tree
+			t1.size = 0;
+		}
+		if (!t2.isEmpty()) {
+			t2.root.setParent(node);
+			node.setLeft(t2.root);
+			t2.root = null;
+			t2.size = 0;
+		}
+	}
+
+
+	@Override
+	public Iterator<E> iterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterable<Position<E>> positions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+}
